@@ -1,7 +1,12 @@
+/* index.css */
 @import url('https://fonts.cdnfonts.com/css/chillax');
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
 
-*{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -11,14 +16,24 @@ body {
   font-family: 'Chillax', sans-serif;
 }
 
-h2{
+h2 {
   font-family: 'Syne', sans-serif;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-1.5;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-opacity-20 bg-[#f4f4f5] rounded-md;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply rounded-md;
+  background: linear-gradient(to bottom, #EDBEC2, #D84DD5, #734DED, #FF3DFF);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #FF3DFF, #734DED, #EDBEC2, #D84DD5);
+}
 
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
- 
-
+.bg-custom-gradient {
+  background: linear-gradient(to right, #9ed7ff, #fff, #9ed7ff);
+}

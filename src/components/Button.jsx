@@ -1,8 +1,8 @@
+// Button.js
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  border-radius: 5px;
   border-style: solid;
   border-width: 2px;
   border-image: linear-gradient(to right, #FF3DFF, #EDBEC2, #734DED, #D84DD5) 1;
@@ -19,14 +19,15 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ children }) => {
+const Button = ({ children, onClick }) => {
   return (
-    <StyledButton>{ children }</StyledButton>
+    <StyledButton onClick={onClick}>{children}</StyledButton>
   );
 };
 
 Button.propTypes = {
-  children: PropTypes.node.isRequired // Validate children prop as a React node
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func.isRequired, // Validate onClick prop as a function
 };
 
 export default Button;
