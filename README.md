@@ -1,4 +1,4 @@
-**SparkyAI Chat Application**
+## **SparkyAI Chat Application**
 
 Welcome to the SparkyAI Chat Application repository! This application provides a user interface to interact with an AI-powered chatbot. Users can send prompts, receive responses, and view chat history.
 

@@ -15,11 +15,11 @@ const App = () => {
 
   return (
     <div className="flex h-screen" style={{ backgroundImage: `url(${bg})` }}>
-      {/* Sidebar component */}
-      <Sidebar isOpen={isSidebarOpen} />
-
-      {/* ContextProvider component to provide context to Main */}
       <ContextProvider>
+        {/* Sidebar component */}
+        <Sidebar isOpen={isSidebarOpen} />
+        
+        {/* ContextProvider component to provide context to Main */}
         <Main 
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}

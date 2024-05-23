@@ -37,27 +37,27 @@ const ContextProvider = (props) => {
     // Show the result section
     setShowResult(true);
     // Set the most recent prompt
-    setRecentPrompt(input);
+    setRecentPrompt(prompt);
     // Clear previous result data
-    setResultData(""); 
+    setResultData("");
 
     try {
       // Send the prompt to the API and get the response
       const response = await run(prompt);
 
-      // Process the response to add formatting
+      // Handle bold text and new lines
       let resArray = response.split('**');
-      let newPrompt = '';
+      let newPrompt = "";
       for (let i = 0; i < resArray.length; i++) {
-        if (i === 0 || i % 2 !== 1) {
-          newPrompt += resArray[i];
+        if (i % 2 === 1) {
+          newPrompt += `<b>${resArray[i]}</b>`;
         } else {
-          newPrompt += '<b>' + resArray[i] + '</b>';
+          newPrompt += resArray[i];
         }
       }
-      // Replace '*' with line breaks and split by spaces for typing effect
-      let newRes = newPrompt.split('*').join('</br>');
+      let newRes = newPrompt.replace(/\n/g, '<br/>');
       let newResArray = newRes.split(' ');
+      setResultData(""); // Clear previous result before starting typing effect
       for (let i = 0; i < newResArray.length; i++) {
         const nextWord = newResArray[i];
         typingEffect(i, nextWord + ' ');

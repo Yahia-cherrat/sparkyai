@@ -16,7 +16,7 @@ const Main = ({ isSidebarOpen, toggleSidebar }) => {
 
   return (
     // Main container with conditional classes based on sidebar open state
-    <div className={`flex flex-col w-full p-4 ${isSidebarOpen ? '' : ''}`}>
+    <div className={`flex flex-col w-full p-4 transition-all`}>
       {/* Navbar component */}
       <div className="flex items-start">
         <Navbar />
@@ -67,16 +67,16 @@ const Main = ({ isSidebarOpen, toggleSidebar }) => {
             // Displayed when showResult is true
             <div className="relative w-full h-full text-[#f4f4f5]">
               <div className="absolute bottom-0 p-2 max-h-full overflow-y-auto w-full custom-scrollbar">
-                <h1 className="mb-2 text-base font-medium">{recentPrompt}</h1>
+                <h1 className="mb-2 text-lg font-medium">{recentPrompt}</h1>
                 {/* Loading animation when data is being fetched */}
                 {loading ? (
                   <div className="w-full flex flex-col gap-3 animate-pulse">
-                    <hr className="rounded-md border-0 bg-[#f6f7f8] h-3 bg-custom-gradient" />
-                    <hr className="rounded-md border-0 bg-[#f6f7f8] h-3 bg-custom-gradient" />
+                    <hr className="rounded border-0 bg-[#f6f7f8] h-2 bg-custom-gradient" />
+                    <hr className="rounded border-0 bg-[#f6f7f8] h-2 bg-custom-gradient" />
                   </div>
                 ) : (
                   // Result data
-                  <p className="text-sm font-light text-justify" dangerouslySetInnerHTML={{__html:resultData}}></p>
+                  <p className="text-sm" dangerouslySetInnerHTML={{__html:resultData}}></p>
                 )}
               </div>
             </div>
