@@ -14,7 +14,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-screen" style={{ backgroundImage: `url(${bg})` }}>
+    <div className="flex h-screen" style={{ backgroundImage: `url(${bg})`, backgroundSize: "cover" }}>
       <ContextProvider>
         {/* Sidebar component */}
         <Sidebar isOpen={isSidebarOpen} />

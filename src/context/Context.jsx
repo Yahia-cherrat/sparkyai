@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import run from "../config/gemini";
 
 // Create the context
@@ -18,6 +18,19 @@ const ContextProvider = (props) => {
   // State for the result data
   const [resultData, setResultData] = useState("");
 
+  useEffect(() => {
+    // Load prompts from localStorage on component mount
+    const storedPrompts = localStorage.getItem("prevPrompts");
+    if (storedPrompts) {
+      setPrevPrompts(JSON.parse(storedPrompts));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save prompts to localStorage whenever prevPrompts changes
+    localStorage.setItem("prevPrompts", JSON.stringify(prevPrompts));
+  }, [prevPrompts]);
+
   // Function to create a typing effect
   const typingEffect = (index, nextWord) => {
     setTimeout(() => {
@@ -26,14 +39,22 @@ const ContextProvider = (props) => {
   };
 
   // Function to handle the sending of a prompt
-  const onSent = async (prompt) => {
+  const onSent = async (prompt, addToHistory = true) => {
     // Check if the input is empty and return if it is
     if (!prompt.trim()) return;  
     
     // Set loading to true
     setLoading(true);
-    // Add the prompt to the list of previous prompts
-    setPrevPrompts(prev => [...prev, prompt]);
+
+    // Only add to history if addToHistory is true
+    if (addToHistory) {
+      setPrevPrompts(prev => {
+        const updatedPrompts = [...prev, prompt]; // Add the prompt to the list of previous prompts
+        console.log("Updated prevPrompts:", updatedPrompts);
+        return updatedPrompts;
+      });
+    }
+
     // Show the result section
     setShowResult(true);
     // Set the most recent prompt
@@ -44,24 +65,15 @@ const ContextProvider = (props) => {
     try {
       // Send the prompt to the API and get the response
       const response = await run(prompt);
-
-      // Handle bold text and new lines
-      let resArray = response.split('**');
-      let newPrompt = "";
-      for (let i = 0; i < resArray.length; i++) {
-        if (i % 2 === 1) {
-          newPrompt += `<b>${resArray[i]}</b>`;
-        } else {
-          newPrompt += resArray[i];
-        }
-      }
-      let newRes = newPrompt.replace(/\n/g, '<br/>');
-      let newResArray = newRes.split(' ');
-      setResultData(""); // Clear previous result before starting typing effect
-      for (let i = 0; i < newResArray.length; i++) {
-        const nextWord = newResArray[i];
-        typingEffect(i, nextWord + ' ');
-      }
+      // Handle bold text using regex
+      let newPrompt = response.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      // Handle new lines
+      newPrompt = newPrompt.replace(/\*\*/g, "<br/>");
+      // Split the response into words for the typing effect
+      let newResArray = newPrompt.split(' ');
+      // Clear previous result before starting typing effect
+      setResultData("");
+      newResArray.forEach((word, index) => typingEffect(index, word));
     } catch (error) {
       // Log any errors
       console.error("Error running Gemini:", error); 
@@ -73,9 +85,14 @@ const ContextProvider = (props) => {
     }
   };
 
+  const reloadPrompt = async (prompt) => {
+    await onSent(prompt, false); // Call onSent without adding to history
+  };
+
   // Define the context value
   const contextValue = {
     onSent,
+    reloadPrompt,
     prevPrompts,
     setPrevPrompts,
     setRecentPrompt,
